@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Home from './pages/Home'
 function App() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <>
         <Switch>
           <Route exact path="/">
