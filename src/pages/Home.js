@@ -3,24 +3,36 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import $ from 'jquery'
 import { Button } from 'react-bootstrap'
 import Draggable from 'react-draggable'
+import ViewNumber from '../containers/viewNumber'
+import ClickBtn from '../containers/clickBtn'
 //redux
 import { connect } from 'react-redux'
-//action
 import { bindActionCreators } from 'redux'
+//action
+import {
+  addNumber,
+  subNumber,
+  resetNumber,
+  countNumber,
+  inputNumber,
+} from '../actions/actions'
 //引入自己的css
 import '../css/home.scss'
-function Home(props) {
-  //設定計算機初始值
-  const [total, setTotal] = useState(0)
 
+function Home(props) {
   //設定按鈕顯示
   const [device, setDevice] = useState('')
 
   //偵測視窗顯示文字
   const handleBtnShow = function () {
-    if (window.innerWidth > 768) setDevice('Computer')
-    else if (window.innerWidth > 576) setDevice('Computer')
-    else setDevice('Mobile')
+    if (window.innerWidth > 768) {
+      setDevice('Computer')
+    } else if (window.innerWidth > 576) {
+      setDevice('Computer')
+      console.log('computer')
+    } else {
+      setDevice('Mobile')
+    }
   }
   useEffect(() => {
     window.addEventListener('resize', handleBtnShow)
@@ -70,100 +82,35 @@ function Home(props) {
         <Draggable>
           <div className="calculator_computer">
             <div className="wrapper">
-              <div className="row">
-                <div className="total">{total}</div>
-              </div>
-              <div className="row mt-2">
-                <div className="row_flex">
-                  <div className="circle symbol_grey">AC</div>
-                  <div className="circle symbol_grey">+/-</div>
-                  <div className="circle symbol_grey">%</div>
-                  <div className="circle symbol_blue">&divide;</div>
-                </div>
-              </div>
-              <div className="row mt-2">
-                <div className="row_flex">
-                  <div className="circle num">7</div>
-                  <div className="circle num">8</div>
-                  <div className="circle num">9</div>
-                  <div className="circle symbol_blue">&times;</div>
-                </div>
-              </div>
-              <div className="row mt-2">
-                <div className="row_flex">
-                  <div className="circle num">4</div>
-                  <div className="circle num">5</div>
-                  <div className="circle num">6</div>
-                  <div className="circle symbol_blue">&minus;</div>
-                </div>
-              </div>
-              <div className="row mt-2">
-                <div className="row_flex">
-                  <div className="circle num">1</div>
-                  <div className="circle num">2</div>
-                  <div className="circle num">3</div>
-                  <div className="circle symbol_blue">+</div>
-                </div>
-              </div>
-              <div className="row mt-2">
-                <div className="row_flex">
-                  <div className="ellipse num">0</div>
-                  <div className="circle num">.</div>
-                  <div className="circle symbol_blue">=</div>
-                </div>
-              </div>
+              <ViewNumber />
+              <ClickBtn />
             </div>
           </div>
         </Draggable>
         <div className="home_helf"></div>
         <div className="calculator_mobile d-none">
           <div className="wrapper">
-            <div className="row">
-              <div className="total">{total}</div>
-            </div>
-            <div className="row mt-2">
-              <div className="row_flex">
-                <div className="circle symbol_grey">AC</div>
-                <div className="circle symbol_grey">+/-</div>
-                <div className="circle symbol_grey">%</div>
-                <div className="circle symbol_blue">&divide;</div>
-              </div>
-            </div>
-            <div className="row mt-2">
-              <div className="row_flex">
-                <div className="circle num">7</div>
-                <div className="circle num">8</div>
-                <div className="circle num">9</div>
-                <div className="circle symbol_blue">&times;</div>
-              </div>
-            </div>
-            <div className="row mt-2">
-              <div className="row_flex">
-                <div className="circle num">4</div>
-                <div className="circle num">5</div>
-                <div className="circle num">6</div>
-                <div className="circle symbol_blue">&minus;</div>
-              </div>
-            </div>
-            <div className="row mt-2">
-              <div className="row_flex">
-                <div className="circle num">1</div>
-                <div className="circle num">2</div>
-                <div className="circle num">3</div>
-                <div className="circle symbol_blue">+</div>
-              </div>
-            </div>
-            <div className="row mt-2">
-              <div className="row_flex">
-                <div className="ellipse num">0</div>
-                <div className="circle num">.</div>
-                <div className="circle symbol_blue">=</div>
-              </div>
-            </div>
+            <ViewNumber />
+            <ClickBtn />
           </div>
         </div>
       </div>
     </>
   )
 }
-export default Home
+const mapStateToProps = (store) => {
+  return { calculator: store.calculator }
+}
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(
+    {
+      addNumber,
+      subNumber,
+      resetNumber,
+      countNumber,
+      inputNumber,
+    },
+    dispatch
+  )
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
